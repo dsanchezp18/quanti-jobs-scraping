@@ -1,4 +1,4 @@
-# data-web-scraping
+# quanti-jobs-scraping
 
 Analisis reproducible en R de las herramientas y competencias tecnicas mas solicitadas en ofertas laborales de datos en Ecuador.
 
