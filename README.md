@@ -1,45 +1,68 @@
 # quanti-jobs-scraping
 
-Analisis reproducible en R de las herramientas y competencias tecnicas mas solicitadas en ofertas laborales de datos en Ecuador.
+## Overview
 
-Este repositorio parte de dos cortes de ofertas ya recolectados publicamente en Multitrabajos, Computrabajo y Mipleo (17 de junio y 16 de julio de 2026). Contiene el dataset resultante y el codigo de analisis, no el codigo de recoleccion. La metodologia de scraping se documenta por separado y todavia no se hace publica.
+Analisis reproducible en R del mercado laboral de datos en Ecuador, con foco en las herramientas y competencias tecnicas que aparecen en ofertas publicas de empleo.
 
-## Estructura
+Este repositorio usa cortes acumulados de ofertas laborales publicas en Multitrabajos, Computrabajo y Mipleo, tomados entre el 17 de junio y el 26 de julio de 2026. Contiene el dataset de entrada para el analisis, el codigo para construir la muestra analitica y las salidas que alimentan un articulo tecnico de El Quantificador. No publica el codigo de scraping ni su metodologia detallada.
+
+## How to Replicate
+
+1. Abre el proyecto desde la raiz del repositorio.
+2. Verifica que tengas instalados `dplyr`, `ggplot2`, `readr`, `scales`, `stringr` y `tidyr`.
+3. Corre `source("MASTER.R")`.
+
+`MASTER.R` acumula los cortes disponibles de junio y julio, construye la muestra analitica y luego exporta tablas, figuras y un resumen serializado.
+
+## Project Structure
 
 ```text
 .
+├── MASTER.R
+├── code/
+│   ├── cleaning/
+│   └── analysis/
 ├── data/
-│   └── raw/
-│       ├── ofertas_2026-06-17.csv
-│       └── ofertas_2026-07-16.csv
+│   ├── raw/
+│   ├── intermediate/
+│   └── final/
 ├── outputs/
 │   ├── figures/
 │   └── tables/
-├── scripts/
-│   └── 01_analisis_mercado_datos.R
-└── README.md
+├── documentation/
+└── scripts/
 ```
 
-## Que hace el script
+## Data Access
 
-`scripts/01_analisis_mercado_datos.R`:
+Los insumos provienen de un pipeline de recoleccion separado que consolida ofertas laborales publicas para roles de datos y tecnologia en Ecuador. La capa de scraping se documenta por separado y por ahora no se transparenta en este repositorio.
 
-1. Combina los dos cortes y elimina duplicados por oferta, conservando la version con la descripcion mas completa.
-2. Filtra al universo analitico (ofertas de datos y tecnologia clasificadas por el pipeline de recoleccion).
-3. Calcula la frecuencia de herramientas (Excel, Power BI, SQL, SAP, Python) y de competencias tecnicas (KPIs, bases de datos, ERP, dashboards, business intelligence) entre las ofertas con habilidades declaradas.
-4. Calcula combinaciones de herramientas (Excel + Power BI + SQL).
-5. Exporta figuras a `outputs/figures/`, tablas a `outputs/tables/` y un resumen a `outputs/mercado_datos_resumen.rds`.
+Los archivos de entrada que si se incluyen aqui son:
 
-## Como correrlo
+- `data/raw/ofertas_2026-06-17.csv`
+- `data/raw/ofertas_2026-07-16.csv`
+- `data/raw/ofertas_2026-07-26.csv`
 
-```r
-source("scripts/01_analisis_mercado_datos.R")
-```
+## Current Analytical Scope
 
-## Dataset
+El flujo actual:
 
-Cada fila es una oferta laboral publica clasificada como perteneciente o no al universo de roles de datos y tecnologia en Ecuador. Las columnas relevantes para este analisis son `source`, `job_id`, `in_universe`, `job_family`, `skills`, `description` y `scraped_at`. El dataset no incluye informacion identificable de postulantes.
+1. acumula todos los cortes disponibles de junio y julio;
+2. elimina duplicados por `source` y `job_id`, conservando la observacion mas reciente y con descripcion mas completa;
+3. filtra al universo analitico marcado por el pipeline de recoleccion;
+4. construye una submuestra con ofertas que declaran habilidades;
+5. calcula herramientas, competencias tecnicas, combinaciones y composicion ocupacional.
 
-## Articulo relacionado
+Las cifras se regeneran cada vez que se ejecuta `MASTER.R`, por lo que los totales dependen de los cortes acumulados presentes en `data/raw/`.
 
-Este analisis sustenta la version tecnica publicada en [El Quantificador](https://elquantificador.blog/) sobre las herramientas que piden los empleadores ecuatorianos en el mercado de datos.
+## Outputs
+
+Las principales salidas actuales son:
+
+- figuras en `outputs/figures/`;
+- tablas en `outputs/tables/`;
+- un resumen serializado en `outputs/mercado_datos_resumen.rds`.
+
+## Article Status
+
+Este repositorio ya deja lista la base reproducible del analisis. El siguiente paso es refrescar el borrador del articulo con las nuevas cifras acumuladas de junio y julio, manteniendo el foco en lo que el mercado realmente pide en las vacantes publicas.
