@@ -1,6 +1,6 @@
 job_family,n_ofertas,familia,porcentaje
-data_adjacent,390,Adyacente a datos,0.8666666666666667
-it_non_data_or_software_engineering_heavy,30,TI / software,0.06666666666666667
-data_analyst,26,Analista de datos / BI,0.057777777777777775
-data_engineering,2,Ingenieria de datos,0.0044444444444444444
-data_scientist_ml,2,Ciencia de datos / ML,0.0044444444444444444
+data_adjacent,464,Adyacente a datos,0.887189292543021
+data_analyst,34,Analista de datos / BI,0.06500956022944551
+it_non_data_or_software_engineering_heavy,17,TI / software,0.032504780114722756
+data_engineering,4,Ingenieria de datos,0.0076481835564053535
+data_scientist_ml,4,Ciencia de datos / ML,0.0076481835564053535

@@ -1,0 +1,21 @@
+job_family,skill,n_ofertas,porcentaje
+data_adjacent,Excel,287,0.2810969637610186
+data_adjacent,KPIs,103,0.10088148873653281
+data_adjacent,Power BI,81,0.07933398628795299
+data_adjacent,ERP,77,0.07541625857002938
+data_adjacent,Bases de Datos,69,0.06758080313418217
+data_adjacent,Analisis De Datos,61,0.059745347698334964
+data_adjacent,SAP,46,0.04505386875612145
+data_adjacent,Dashboards,40,0.039177277179236046
+data_adjacent,SQL,38,0.03721841332027424
+data_adjacent,Estadistica,29,0.02840352595494613
+data_analyst,Power BI,30,0.11494252873563218
+data_analyst,Excel,28,0.10727969348659004
+data_analyst,SQL,23,0.08812260536398467
+data_analyst,Analisis De Datos,21,0.08045977011494253
+data_analyst,Dashboards,21,0.08045977011494253
+data_analyst,Estadistica,21,0.08045977011494253
+data_analyst,Business Intelligence,19,0.07279693486590039
+data_analyst,Bases de Datos,17,0.06513409961685823
+data_analyst,KPIs,14,0.05363984674329502
+data_analyst,Python,9,0.034482758620689655

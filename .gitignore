@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+
+data/intermediate/*
+data/final/*
+!data/intermediate/README.md
+!data/final/README.md
