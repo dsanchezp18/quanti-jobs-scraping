@@ -17,6 +17,7 @@ library(scales)
 library(stringr)
 library(tidyr)
 library(tibble)
+library(forcats)
 
 final_dir <- file.path("data", "final")
 figures_dir <- file.path("outputs", "figures")
@@ -25,15 +26,28 @@ tables_dir <- file.path("outputs", "tables")
 dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
 
-fig_width <- 8
-fig_height <- 5
+fig_width <- 6.1
+fig_height <- 5.4
 
-quanti_blue <- "#1B4F72"
-quanti_mid <- "#2980B9"
-quanti_gray <- "#5D6D7E"
+quanti_blue <- "#6FA8DC"
+quanti_blue_dark <- "#355C7D"
+quanti_burgundy <- "#A94442"
+quanti_ink <- "#4A4A4A"
+quanti_grid <- "#E6E6E6"
+quanti_bg <- "#FFFFFF"
 
 herramientas_foco <- c("Excel", "Power BI", "SQL", "SAP", "Python")
 competencias_foco <- c("KPIs", "Bases de Datos", "ERP", "Dashboards", "Business Intelligence")
+soft_skills_patterns <- tibble::tribble(
+  ~skill, ~pattern,
+  "Organización", "organizaci",
+  "Comunicación", "comunicaci",
+  "Planificación", "planificaci",
+  "Proactividad", "proactiv",
+  "Trabajo en equipo", "trabajo en equipo",
+  "Atención al detalle", "detalle",
+  "Pensamiento analítico", "analitico|analítico"
+)
 
 skill_recode <- c(
   "Sql" = "SQL",
@@ -49,10 +63,48 @@ skill_recode <- c(
 familia_labels <- c(
   "data_analyst" = "Analista de datos / BI",
   "data_scientist_ml" = "Ciencia de datos / ML",
-  "data_engineering" = "Ingenieria de datos",
+  "data_engineering" = "Ingeniería de datos",
   "it_non_data_or_software_engineering_heavy" = "TI / software",
   "data_adjacent" = "Adyacente a datos"
 )
+
+wrap_axis_labels <- function(x, width = 16) {
+  stringr::str_wrap(x, width = width)
+}
+
+theme_enighur <- function() {
+  theme_minimal(base_size = 11.5, base_family = "sans") +
+    theme(
+      plot.background = element_rect(fill = quanti_bg, color = NA),
+      panel.background = element_rect(fill = quanti_bg, color = NA),
+      panel.grid.major.x = element_line(color = quanti_grid, linewidth = 0.3),
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.title = element_blank(),
+      axis.text = element_text(color = quanti_ink, size = 9.8),
+      axis.text.y = element_text(hjust = 1),
+      axis.text.x = element_text(margin = margin(t = 5)),
+      plot.title = element_blank(),
+      plot.subtitle = element_blank(),
+      plot.caption = element_blank(),
+      legend.position = "none",
+      axis.line.x = element_blank(),
+      axis.line.y = element_blank(),
+      axis.ticks = element_blank(),
+      plot.margin = margin(12, 24, 14, 12)
+    )
+}
+
+save_chart <- function(plot_obj, filename, width = fig_width, height = fig_height) {
+  ggsave(
+    filename = file.path(figures_dir, filename),
+    plot = plot_obj,
+    width = width,
+    height = height,
+    dpi = 180,
+    bg = "white"
+  )
+}
 
 # 1. Load Data ----
 ofertas_universo <- read_csv(
@@ -171,82 +223,16 @@ skills_familias_principales <- habilidades_largo |>
   slice_max(n_ofertas, n = 10, with_ties = FALSE) |>
   ungroup()
 
-# 4. Export ----
-fig_herramientas <- ggplot(conteo_herramientas, aes(x = skill, y = porcentaje)) +
-  geom_col(fill = quanti_blue, width = 0.65) +
-  geom_text(aes(label = percent(porcentaje, accuracy = 1)), vjust = -0.5, size = 3.5) +
-  scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.8)) +
-  labs(
-    title = "Excel, Power BI y SQL dominan las ofertas de datos en Ecuador",
-    subtitle = paste0(
-      "Porcentaje de las ",
-      n_con_habilidades,
-      " ofertas con habilidades declaradas que menciona cada herramienta"
-    ),
-    x = NULL,
-    y = NULL,
-    caption = "Fuente: Multitrabajos, Computrabajo y Mipleo, cortes del 17 de junio y 16 de julio de 2026."
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank())
+conteo_habilidades_suaves <- soft_skills_patterns |>
+  rowwise() |>
+  mutate(n_ofertas = sum(str_detect(str_to_lower(coalesce(ofertas_universo$description, "")), pattern))) |>
+  ungroup() |>
+  mutate(
+    porcentaje = n_ofertas / n_universo,
+    skill = factor(skill, levels = skill[order(n_ofertas)])
+  )
 
-ggsave(
-  file.path(figures_dir, "herramientas_demandadas.png"),
-  fig_herramientas,
-  width = fig_width,
-  height = fig_height,
-  dpi = 150
-)
-
-fig_competencias <- ggplot(conteo_competencias, aes(x = skill, y = porcentaje)) +
-  geom_col(fill = quanti_mid, width = 0.65) +
-  geom_text(aes(label = percent(porcentaje, accuracy = 1)), vjust = -0.5, size = 3.5) +
-  scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0, 0.35)) +
-  labs(
-    title = "KPIs y bases de datos son las competencias tecnicas mas mencionadas",
-    subtitle = paste0(
-      "Porcentaje de las ",
-      n_con_habilidades,
-      " ofertas con habilidades declaradas que menciona cada competencia"
-    ),
-    x = NULL,
-    y = NULL,
-    caption = "Fuente: Multitrabajos, Computrabajo y Mipleo, cortes del 17 de junio y 16 de julio de 2026."
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank())
-
-ggsave(
-  file.path(figures_dir, "competencias_tecnicas.png"),
-  fig_competencias,
-  width = fig_width,
-  height = fig_height,
-  dpi = 150
-)
-
-fig_familias <- ggplot(conteo_familias, aes(x = reorder(familia, n_ofertas), y = n_ofertas)) +
-  geom_col(fill = quanti_gray, width = 0.65) +
-  geom_text(aes(label = n_ofertas), hjust = -0.2, size = 3.5) +
-  coord_flip() +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
-  labs(
-    title = "Composicion del universo analitico por familia ocupacional",
-    subtitle = paste0(n_universo, " ofertas clasificadas dentro del universo de datos y tecnologia"),
-    x = NULL,
-    y = "Numero de ofertas",
-    caption = "Fuente: Multitrabajos, Computrabajo y Mipleo, cortes del 17 de junio y 16 de julio de 2026."
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
-
-ggsave(
-  file.path(figures_dir, "familias_ocupacionales.png"),
-  fig_familias,
-  width = fig_width,
-  height = fig_height,
-  dpi = 150
-)
-
+# 4. Export tables ----
 write_csv(conteo_herramientas, file.path(tables_dir, "herramientas_demandadas.csv"))
 write_csv(conteo_competencias, file.path(tables_dir, "competencias_tecnicas.csv"))
 write_csv(combinaciones, file.path(tables_dir, "combinaciones_herramientas.csv"))
@@ -255,7 +241,105 @@ write_csv(conteo_fuentes, file.path(tables_dir, "fuentes_ofertas.csv"))
 write_csv(conteo_ciudades, file.path(tables_dir, "ciudades_ofertas.csv"))
 write_csv(conteo_modalidad, file.path(tables_dir, "modalidad_ofertas.csv"))
 write_csv(skills_familias_principales, file.path(tables_dir, "skills_familias_principales.csv"))
+write_csv(
+  conteo_habilidades_suaves |> mutate(skill = as.character(skill)),
+  file.path(tables_dir, "habilidades_suaves.csv")
+)
 
+# 5. Export figures ----
+fig_herramientas <- ggplot(
+  conteo_herramientas,
+  aes(x = skill, y = porcentaje, fill = skill == "Excel")
+) +
+  geom_col(width = 0.68) +
+  geom_hline(yintercept = 0, color = quanti_grid, linewidth = 0.3) +
+  geom_text(
+    aes(label = percent(porcentaje, accuracy = 1)),
+    vjust = -0.75,
+    color = quanti_ink,
+    size = 3.4
+  ) +
+  scale_fill_manual(values = c(`TRUE` = quanti_burgundy, `FALSE` = quanti_blue)) +
+  scale_x_discrete(labels = function(x) wrap_axis_labels(x, width = 10)) +
+  scale_y_continuous(
+    labels = percent_format(accuracy = 1),
+    limits = c(0, 0.8),
+    breaks = seq(0, 0.8, by = 0.2),
+    expand = expansion(mult = c(0, 0.04))
+  ) +
+  theme_enighur()
+
+save_chart(fig_herramientas, "herramientas_demandadas.png")
+
+fig_competencias <- ggplot(
+  conteo_competencias,
+  aes(x = skill, y = porcentaje, fill = skill == "KPIs")
+) +
+  geom_col(width = 0.68) +
+  geom_hline(yintercept = 0, color = quanti_grid, linewidth = 0.3) +
+  geom_text(
+    aes(label = percent(porcentaje, accuracy = 1)),
+    vjust = -0.75,
+    color = quanti_ink,
+    size = 3.35
+  ) +
+  scale_fill_manual(values = c(`TRUE` = quanti_burgundy, `FALSE` = quanti_blue)) +
+  scale_x_discrete(labels = function(x) wrap_axis_labels(x, width = 12)) +
+  scale_y_continuous(
+    labels = percent_format(accuracy = 1),
+    limits = c(0, 0.35),
+    breaks = seq(0, 0.3, by = 0.1),
+    expand = expansion(mult = c(0, 0.04))
+  ) +
+  theme_enighur()
+
+save_chart(fig_competencias, "competencias_tecnicas.png")
+
+fig_familias <- ggplot(
+  conteo_familias,
+  aes(x = fct_reorder(wrap_axis_labels(familia, width = 24), n_ofertas), y = n_ofertas, fill = familia == "Adyacente a datos")
+) +
+  geom_col(width = 0.66) +
+  geom_text(
+    aes(label = n_ofertas),
+    hjust = -0.25,
+    color = quanti_ink,
+    size = 3.4
+  ) +
+  coord_flip() +
+  scale_fill_manual(values = c(`TRUE` = quanti_burgundy, `FALSE` = quanti_blue)) +
+  scale_y_continuous(
+    breaks = pretty_breaks(n = 4),
+    expand = expansion(mult = c(0, 0.12))
+  ) +
+  theme_enighur()
+
+save_chart(fig_familias, "familias_ocupacionales.png")
+
+fig_soft_skills <- ggplot(
+  conteo_habilidades_suaves,
+  aes(x = fct_reorder(wrap_axis_labels(skill, width = 20), porcentaje), y = porcentaje, fill = skill == "Organización")
+) +
+  geom_col(width = 0.66) +
+  geom_text(
+    aes(label = percent(porcentaje, accuracy = 1)),
+    hjust = -0.18,
+    color = quanti_ink,
+    size = 3.3
+  ) +
+  coord_flip() +
+  scale_fill_manual(values = c(`TRUE` = quanti_burgundy, `FALSE` = quanti_blue)) +
+  scale_y_continuous(
+    labels = percent_format(accuracy = 1),
+    limits = c(0, 0.55),
+    breaks = seq(0, 0.5, by = 0.1),
+    expand = expansion(mult = c(0, 0.08))
+  ) +
+  theme_enighur()
+
+save_chart(fig_soft_skills, "habilidades_suaves.png")
+
+# 6. Save summary ----
 resumen_mercado_datos <- list(
   n_bruto = embudo_muestra$n[embudo_muestra$etapa == "Registros brutos"],
   n_unicas = embudo_muestra$n[embudo_muestra$etapa == "Ofertas unicas"],
@@ -268,6 +352,7 @@ resumen_mercado_datos <- list(
   conteo_fuentes = conteo_fuentes,
   conteo_ciudades = conteo_ciudades,
   conteo_modalidad = conteo_modalidad,
+  conteo_habilidades_suaves = conteo_habilidades_suaves,
   skills_familias_principales = skills_familias_principales,
   embudo_muestra = embudo_muestra
 )
