@@ -15,9 +15,9 @@ tags:
   - empleo
   - power bi
 description: 'Daniel Sánchez analiza ofertas laborales públicas acumuladas entre junio y julio de 2026 y encuentra que el mercado visible de datos en Ecuador se concentra en Excel, KPIs, reportería y Power BI, mucho más que Python o machine learning.'
-thumbnail: 'images/grafico2.png'
+thumbnail: 'images/thumbnail.png'
 images:
-  - 'images/grafico2.png'
+  - 'images/thumbnail.png'
 edition: 'Julio-Diciembre 2026'
 ---
 
@@ -139,5 +139,5 @@ También hay límites importantes en variables clave. La información salarial a
 
 Aun con esos límites, la base sí permite responder la pregunta central del artículo. La parte visible del mercado laboral de datos en Ecuador está dominada por herramientas básicas, funciones de seguimiento y perfiles operativos. Ese resultado es suficientemente consistente como para tomárselo en serio.
 
-*Este artículo se elaboró con ofertas laborales públicas observadas en Multitrabajos, Computrabajo y Mipleo entre el 17 de junio y el 26 de julio de 2026. El repositorio con la base reproducible del análisis está disponible en [GitHub](https://github.com/dsanchezp18/quanti-jobs-scraping).*
+*Este artículo se elaboró con ofertas laborales públicas observadas en Multitrabajos, Computrabajo y Mipleo entre el 17 de junio y el 26 de julio de 2026. El repositorio con la base reproducible del análisis está disponible en [GitHub](https://github.com/dsanchezp18/quanti-jobs-scraping). La imagen de portada fue generada con inteligencia artificial.*
 
