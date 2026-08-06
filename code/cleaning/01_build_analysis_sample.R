@@ -17,10 +17,15 @@ library(readr)
 library(stringr)
 library(tibble)
 
+# set.seed(42)
+
 raw_dir <- file.path("data", "raw")
 intermediate_dir <- file.path("data", "intermediate")
 final_dir <- file.path("data", "final")
 tables_dir <- file.path("outputs", "tables")
+
+cut_pattern <- "^ofertas_2026-(06|07)-[0-9]{2}\\.csv$"
+cut_date_pattern <- "2026-[0-9]{2}-[0-9]{2}"
 
 dir.create(intermediate_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(final_dir, recursive = TRUE, showWarnings = FALSE)
@@ -29,7 +34,7 @@ dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
 # 1. Load Data ----
 raw_files <- list.files(
   path = raw_dir,
-  pattern = "^ofertas_2026-(06|07)-[0-9]{2}\\.csv$",
+  pattern = cut_pattern,
   full.names = TRUE
 )
 
@@ -39,19 +44,17 @@ if (length(raw_files) == 0) {
 
 raw_files <- sort(raw_files)
 
-read_cut <- function(path) {
-  cut_name <- basename(path)
-  cut_date <- str_extract(cut_name, "2026-[0-9]{2}-[0-9]{2}")
-
-  read_csv(path, col_types = cols(.default = "c")) |>
-    mutate(
-      cut_file = cut_name,
-      cut_date = cut_date
-    )
-}
-
-raw_cuts <- lapply(raw_files, read_cut)
-ofertas_brutas <- bind_rows(raw_cuts)
+# Todos los cortes comparten el mismo esquema, asi que readr los apila directamente.
+ofertas_brutas <- read_csv(
+  raw_files,
+  col_types = cols(.default = "c"),
+  id = "cut_path"
+) |>
+  mutate(
+    cut_file = basename(cut_path),
+    cut_date = str_extract(cut_file, cut_date_pattern)
+  ) |>
+  select(-cut_path)
 
 cortes_acumulados <- ofertas_brutas |>
   count(cut_date, cut_file, name = "n_registros") |>
@@ -61,7 +64,7 @@ n_bruto <- nrow(ofertas_brutas)
 
 # 2. Clean / Transform ----
 ofertas_unicas <- ofertas_brutas |>
-  mutate(description_length = nchar(coalesce(description, ""))) |>
+  mutate(description_length = str_length(coalesce(description, ""))) |>
   arrange(source, job_id, desc(cut_date), desc(description_length)) |>
   group_by(source, job_id) |>
   slice(1) |>
@@ -97,3 +100,7 @@ write_csv(ofertas_universo, file.path(final_dir, "ofertas_universo_analitico.csv
 write_csv(ofertas_con_habilidades, file.path(final_dir, "ofertas_con_habilidades.csv"))
 write_csv(embudo_muestra, file.path(tables_dir, "embudo_muestra.csv"))
 write_csv(cortes_acumulados, file.path(tables_dir, "cortes_acumulados.csv"))
+
+message("Muestra analitica construida: ", n_con_habilidades, " ofertas con habilidades.")
+
+sessionInfo()
