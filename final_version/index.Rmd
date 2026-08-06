@@ -1,5 +1,5 @@
 ---
-title: "En Ecuador, las ofertas de datos piden Excel, KPIs y Power BI mucho antes que Python"
+title: "¿Qué quieren los empleadores ecuatorianos cuando buscan perfiles de datos?"
 date: '2026-08-06'
 slug: 2026-08-06-ofertas-datos-ecuador-excel-python
 authors:
