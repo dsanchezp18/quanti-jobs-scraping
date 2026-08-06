@@ -19,6 +19,7 @@ Este repositorio usa cortes acumulados de ofertas laborales publicas en Multitra
 ```text
 .
 ├── MASTER.R
+├── borrador_articulo_quantificador.md
 ├── code/
 │   ├── cleaning/
 │   └── analysis/
@@ -29,8 +30,8 @@ Este repositorio usa cortes acumulados de ofertas laborales publicas en Multitra
 ├── outputs/
 │   ├── figures/
 │   └── tables/
-├── documentation/
-└── scripts/
+└── documentation/
+    └── archive/
 ```
 
 ## Data Access
@@ -62,6 +63,16 @@ Las principales salidas actuales son:
 - figuras en `outputs/figures/`;
 - tablas en `outputs/tables/`;
 - un resumen serializado en `outputs/mercado_datos_resumen.rds`.
+
+## Article Draft
+
+El borrador vive en `borrador_articulo_quantificador.md` y es la unica fuente del articulo. Para previsualizarlo:
+
+```bash
+quarto render borrador_articulo_quantificador.md --to html --embed-resources
+```
+
+El HTML resultante es un artefacto de compilacion: se regenera cuando haga falta y no se versiona. Las versiones anteriores del borrador se guardan en `documentation/archive/`.
 
 ## Article Status
 

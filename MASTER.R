@@ -3,7 +3,7 @@
 # Author: Daniel Sanchez
 # Purpose: Ejecutar el flujo completo del analisis reproducible del
 #          mercado laboral de datos en Ecuador.
-# Inputs:  data/raw/ofertas_2026-06-17.csv, data/raw/ofertas_2026-07-16.csv
+# Inputs:  data/raw/ofertas_2026-06-*.csv, data/raw/ofertas_2026-07-*.csv
 # Outputs: data/intermediate/*.rds, data/final/*.csv, outputs/*
 # ============================================================
 

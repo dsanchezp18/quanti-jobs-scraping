@@ -19,6 +19,8 @@ library(tidyr)
 library(tibble)
 library(forcats)
 
+# set.seed(42)
+
 final_dir <- file.path("data", "final")
 figures_dir <- file.path("outputs", "figures")
 tables_dir <- file.path("outputs", "tables")
@@ -38,7 +40,7 @@ quanti_bg <- "#FFFFFF"
 
 herramientas_foco <- c("Excel", "Power BI", "SQL", "SAP", "Python")
 competencias_foco <- c("KPIs", "Bases de Datos", "ERP", "Dashboards", "Business Intelligence")
-soft_skills_patterns <- tibble::tribble(
+soft_skills_patterns <- tribble(
   ~skill, ~pattern,
   "Organización", "organizaci",
   "Comunicación", "comunicaci",
@@ -48,29 +50,6 @@ soft_skills_patterns <- tibble::tribble(
   "Atención al detalle", "detalle",
   "Pensamiento analítico", "analitico|analítico"
 )
-
-skill_recode <- c(
-  "Sql" = "SQL",
-  "Power Bi" = "Power BI",
-  "Kpis" = "KPIs",
-  "Erp" = "ERP",
-  "Bi" = "BI",
-  "Sap" = "SAP",
-  "Bases De Datos" = "Bases de Datos",
-  "Business Intelligence" = "Business Intelligence"
-)
-
-familia_labels <- c(
-  "data_analyst" = "Analista de datos / BI",
-  "data_scientist_ml" = "Ciencia de datos / ML",
-  "data_engineering" = "Ingeniería de datos",
-  "it_non_data_or_software_engineering_heavy" = "TI / software",
-  "data_adjacent" = "Adyacente a datos"
-)
-
-wrap_axis_labels <- function(x, width = 16) {
-  stringr::str_wrap(x, width = width)
-}
 
 theme_enighur <- function() {
   theme_minimal(base_size = 11.5, base_family = "sans") +
@@ -93,17 +72,6 @@ theme_enighur <- function() {
       axis.ticks = element_blank(),
       plot.margin = margin(12, 24, 14, 12)
     )
-}
-
-save_chart <- function(plot_obj, filename, width = fig_width, height = fig_height) {
-  ggsave(
-    filename = file.path(figures_dir, filename),
-    plot = plot_obj,
-    width = width,
-    height = height,
-    dpi = 180,
-    bg = "white"
-  )
 }
 
 # 1. Load Data ----
@@ -133,7 +101,18 @@ habilidades_largo <- ofertas_con_habilidades |>
   mutate(
     skill = str_squish(skill_list),
     skill = str_to_title(skill),
-    skill = recode(skill, !!!skill_recode)
+    # str_to_title rompe las siglas ("SQL" -> "Sql"), asi que aqui se restauran.
+    skill = recode_values(
+      skill,
+      "Sql" ~ "SQL",
+      "Power Bi" ~ "Power BI",
+      "Kpis" ~ "KPIs",
+      "Erp" ~ "ERP",
+      "Bi" ~ "BI",
+      "Sap" ~ "SAP",
+      "Bases De Datos" ~ "Bases de Datos",
+      default = skill
+    )
   ) |>
   filter(skill != "") |>
   distinct(source, job_id, job_family, skill)
@@ -194,7 +173,15 @@ combinaciones <- tibble(
 conteo_familias <- ofertas_universo |>
   count(job_family, name = "n_ofertas") |>
   mutate(
-    familia = recode(job_family, !!!familia_labels),
+    familia = recode_values(
+      job_family,
+      "data_analyst" ~ "Analista de datos / BI",
+      "data_scientist_ml" ~ "Ciencia de datos / ML",
+      "data_engineering" ~ "Ingeniería de datos",
+      "it_non_data_or_software_engineering_heavy" ~ "TI / software",
+      "data_adjacent" ~ "Adyacente a datos",
+      default = job_family
+    ),
     porcentaje = n_ofertas / n_universo
   ) |>
   arrange(desc(n_ofertas))
@@ -260,7 +247,7 @@ fig_herramientas <- ggplot(
     size = 3.4
   ) +
   scale_fill_manual(values = c(`TRUE` = quanti_burgundy, `FALSE` = quanti_blue)) +
-  scale_x_discrete(labels = function(x) wrap_axis_labels(x, width = 10)) +
+  scale_x_discrete(labels = \(x) str_wrap(x, width = 10)) +
   scale_y_continuous(
     labels = percent_format(accuracy = 1),
     limits = c(0, 0.8),
@@ -269,7 +256,14 @@ fig_herramientas <- ggplot(
   ) +
   theme_enighur()
 
-save_chart(fig_herramientas, "herramientas_demandadas.png")
+ggsave(
+  file.path(figures_dir, "herramientas_demandadas.png"),
+  plot = fig_herramientas,
+  width = fig_width,
+  height = fig_height,
+  dpi = 180,
+  bg = "white"
+)
 
 fig_competencias <- ggplot(
   conteo_competencias,
@@ -284,7 +278,7 @@ fig_competencias <- ggplot(
     size = 3.35
   ) +
   scale_fill_manual(values = c(`TRUE` = quanti_burgundy, `FALSE` = quanti_blue)) +
-  scale_x_discrete(labels = function(x) wrap_axis_labels(x, width = 12)) +
+  scale_x_discrete(labels = \(x) str_wrap(x, width = 12)) +
   scale_y_continuous(
     labels = percent_format(accuracy = 1),
     limits = c(0, 0.35),
@@ -293,11 +287,18 @@ fig_competencias <- ggplot(
   ) +
   theme_enighur()
 
-save_chart(fig_competencias, "competencias_tecnicas.png")
+ggsave(
+  file.path(figures_dir, "competencias_tecnicas.png"),
+  plot = fig_competencias,
+  width = fig_width,
+  height = fig_height,
+  dpi = 180,
+  bg = "white"
+)
 
 fig_familias <- ggplot(
   conteo_familias,
-  aes(x = fct_reorder(wrap_axis_labels(familia, width = 24), n_ofertas), y = n_ofertas, fill = familia == "Adyacente a datos")
+  aes(x = fct_reorder(str_wrap(familia, width = 24), n_ofertas), y = n_ofertas, fill = familia == "Adyacente a datos")
 ) +
   geom_col(width = 0.66) +
   geom_text(
@@ -314,11 +315,18 @@ fig_familias <- ggplot(
   ) +
   theme_enighur()
 
-save_chart(fig_familias, "familias_ocupacionales.png")
+ggsave(
+  file.path(figures_dir, "familias_ocupacionales.png"),
+  plot = fig_familias,
+  width = fig_width,
+  height = fig_height,
+  dpi = 180,
+  bg = "white"
+)
 
 fig_soft_skills <- ggplot(
   conteo_habilidades_suaves,
-  aes(x = fct_reorder(wrap_axis_labels(skill, width = 20), porcentaje), y = porcentaje, fill = skill == "Organización")
+  aes(x = fct_reorder(str_wrap(skill, width = 20), porcentaje), y = porcentaje, fill = skill == "Organización")
 ) +
   geom_col(width = 0.66) +
   geom_text(
@@ -337,7 +345,14 @@ fig_soft_skills <- ggplot(
   ) +
   theme_enighur()
 
-save_chart(fig_soft_skills, "habilidades_suaves.png")
+ggsave(
+  file.path(figures_dir, "habilidades_suaves.png"),
+  plot = fig_soft_skills,
+  width = fig_width,
+  height = fig_height,
+  dpi = 180,
+  bg = "white"
+)
 
 # 6. Save summary ----
 resumen_mercado_datos <- list(
@@ -358,3 +373,7 @@ resumen_mercado_datos <- list(
 )
 
 saveRDS(resumen_mercado_datos, file.path("outputs", "mercado_datos_resumen.rds"))
+
+message("Tablas, figuras y resumen exportados a outputs/.")
+
+sessionInfo()
