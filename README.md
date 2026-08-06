@@ -66,13 +66,23 @@ Las principales salidas actuales son:
 
 ## Article Draft
 
-El borrador vive en `borrador_articulo_quantificador.md` y es la unica fuente del articulo. Para previsualizarlo:
+La version lista para El Quantificador vive en `final_version/`, siguiendo el formato de los repositorios de articulos de la publicacion:
 
-```bash
-quarto render borrador_articulo_quantificador.md --to html --embed-resources
+```text
+final_version/
+├── index.Rmd
+└── images/grafico1..4.png
 ```
 
-El HTML resultante es un artefacto de compilacion: se regenera cuando haga falta y no se versiona. Las versiones anteriores del borrador se guardan en `documentation/archive/`.
+`index.Rmd` es la fuente del articulo. Las figuras de `final_version/images/` las copia el script de analisis desde `outputs/figures/`, asi que no se editan a mano. Para previsualizar:
+
+```bash
+quarto render final_version/index.Rmd --to html --embed-resources
+```
+
+El HTML resultante es un artefacto de compilacion: se regenera cuando haga falta y no se versiona.
+
+`borrador_articulo_quantificador.md` es el borrador previo a la conversion al formato de la publicacion. Las versiones anteriores se guardan en `documentation/archive/`.
 
 ## Article Status
 

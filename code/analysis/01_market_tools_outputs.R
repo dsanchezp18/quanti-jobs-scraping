@@ -6,7 +6,8 @@
 # Inputs:  data/final/ofertas_universo_analitico.csv,
 #          data/final/ofertas_con_habilidades.csv
 # Outputs: outputs/figures/*.png, outputs/tables/*.csv,
-#          outputs/mercado_datos_resumen.rds
+#          outputs/mercado_datos_resumen.rds,
+#          final_version/images/grafico*.png
 # ============================================================
 
 # 0. Setup ----
@@ -24,9 +25,19 @@ library(forcats)
 final_dir <- file.path("data", "final")
 figures_dir <- file.path("outputs", "figures")
 tables_dir <- file.path("outputs", "tables")
+article_images_dir <- file.path("final_version", "images")
 
 dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(article_images_dir, recursive = TRUE, showWarnings = FALSE)
+
+# El bundle de El Quantificador numera las figuras segun el orden del texto.
+article_figures <- c(
+  "familias_ocupacionales.png" = "grafico1.png",
+  "herramientas_demandadas.png" = "grafico2.png",
+  "competencias_tecnicas.png" = "grafico3.png",
+  "habilidades_suaves.png" = "grafico4.png"
+)
 
 fig_width <- 6.1
 fig_height <- 5.4
@@ -373,6 +384,13 @@ resumen_mercado_datos <- list(
 )
 
 saveRDS(resumen_mercado_datos, file.path("outputs", "mercado_datos_resumen.rds"))
+
+# 7. Sync article bundle ----
+file.copy(
+  from = file.path(figures_dir, names(article_figures)),
+  to = file.path(article_images_dir, unname(article_figures)),
+  overwrite = TRUE
+)
 
 message("Tablas, figuras y resumen exportados a outputs/.")
 
