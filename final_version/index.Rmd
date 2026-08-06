@@ -1,9 +1,9 @@
 ---
-title: "¿Qué quieren los empleadores ecuatorianos cuando buscan perfiles de datos?"
+title: "En Ecuador, las ofertas de datos piden Excel, KPIs y Power BI mucho antes que Python"
 date: '2026-08-06'
 slug: 2026-08-06-ofertas-datos-ecuador-excel-python
 authors:
-  - 'daniel-sanchez-pazmino'
+  - 'daniel-sanchez'
 categories:
   - Economía
 tags:
@@ -44,7 +44,7 @@ La clasificación ocupacional del pipeline separa cinco grupos: analista de dato
 *Gráfico 1: Composición del universo analítico por familia ocupacional*
 
 ```{r grafico1}
-knitr::include_graphics("images/grafico1.png")
+knitr::include_graphics("images/grafico1.svg")
 ```
 
 *Fuente: Multitrabajos, Computrabajo y Mipleo. Nota: el gráfico resume ofertas públicas acumuladas entre el 17 de junio y el 26 de julio de 2026, luego de eliminar duplicados entre cortes. El universo analítico incluye ofertas clasificadas como roles de datos, BI o funciones adyacentes a datos en Ecuador.*
@@ -57,16 +57,16 @@ Eso dice dos cosas sobre el mercado laboral visible. La primera es que todavía 
 
 Cuando pasamos a las 457 ofertas que sí declaran habilidades, la jerarquía es muy clara. Excel aparece en 319 ofertas, equivalente a 69,8% de la submuestra. Power BI aparece en 116, o 25,4%. SQL llega a 72, equivalente a 15,8%. SAP aparece en 50, o 10,9%. Python aparece en 29, apenas 6,3%.
 
-Eso quiere decir que Excel está presente en cerca de siete de cada diez ofertas con habilidades declaradas. La imagen del mercado visible no es la de un ecosistema dominado por programación avanzada. Lo que observamos es un mercado que necesita ordenar información, seguir indicadores, armar reportes y sostener tableros para la operación diaria.
+Eso quiere decir que Excel está presente en cerca de siete de cada diez ofertas con habilidades declaradas. La imagen del mercado visible dista de la de un ecosistema dominado por programación avanzada. Lo que observamos es un mercado que necesita ordenar información, seguir indicadores, armar reportes y sostener tableros para la operación diaria.
 
 Power BI y SQL ayudan a entender mejor ese punto. Power BI sirve para construir tableros y visualizaciones que vuelven legible la información para gerencias, equipos comerciales u operaciones. SQL sirve para consultar, limpiar y mover datos dentro de bases estructuradas. Este último es, de los tres, el más técnico.
 
-En conjunto, estas son herramientas útiles para dar un paso más allá de Excel, pero todavía están subordinadas a una lógica de monitoreo y gestión, no a una lógica de modelación compleja. El combo de Excel, Power BI y SQL perfila al trabajador mejor preparado en el plano técnico dentro de este mercado visible.
+En conjunto, estas son herramientas útiles para dar un paso más allá de Excel, pero todavía están subordinadas a una lógica de monitoreo y gestión antes que a una de modelación compleja. El combo de Excel, Power BI y SQL perfila al trabajador mejor preparado en el plano técnico dentro de este mercado visible.
 
 *Gráfico 2: Excel, Power BI y SQL dominan las ofertas públicas de datos en Ecuador*
 
 ```{r grafico2}
-knitr::include_graphics("images/grafico2.png")
+knitr::include_graphics("images/grafico2.svg")
 ```
 
 *Fuente: Multitrabajos, Computrabajo y Mipleo. Nota: los porcentajes se calculan sobre 457 ofertas con habilidades declaradas, observadas entre junio y julio de 2026.*
@@ -77,12 +77,12 @@ El lugar de Python es todavía más revelador. Aparece en alrededor de una de ca
 
 El patrón se confirma cuando dejamos de lado las herramientas y miramos competencias más amplias. Las menciones más frecuentes son KPIs en 118 ofertas, bases de datos en 95, ERP en 80, dashboards en 65 y business intelligence en 47. En porcentaje sobre la submuestra con habilidades, eso equivale a 25,8%, 20,8%, 17,5%, 14,2% y 10,3%, respectivamente.
 
-Este bloque dice bastante sobre el trabajo que las empresas esperan resolver con datos. Lo que aparece con más fuerza no es modelación, experimentación o aprendizaje automático. Lo que aparece es seguimiento de indicadores, consolidación de información, conexión con sistemas empresariales y visualización para la toma de decisiones cotidiana. Esto no se traduce en dominar una herramienta específica, sino en dominar un conjunto de habilidades parecidas y poder aplicarlas dentro de un entorno de trabajo.
+Este bloque dice bastante sobre el trabajo que las empresas esperan resolver con datos. Lo que aparece con más fuerza no es modelación, experimentación o aprendizaje automático. Lo que aparece es seguimiento de indicadores, consolidación de información, conexión con sistemas empresariales y visualización para la toma de decisiones cotidiana. Más que dominar una herramienta específica, se trata de manejar un conjunto de habilidades parecidas y poder aplicarlas dentro de un entorno de trabajo.
 
 *Gráfico 3: KPIs y bases de datos lideran las competencias técnicas más mencionadas*
 
 ```{r grafico3}
-knitr::include_graphics("images/grafico3.png")
+knitr::include_graphics("images/grafico3.svg")
 ```
 
 *Fuente: Multitrabajos, Computrabajo y Mipleo. Nota: los porcentajes se calculan sobre 457 ofertas con habilidades declaradas. Las categorías agrupan términos afines dentro del texto de las vacantes.*
@@ -99,7 +99,7 @@ La modalidad de trabajo va en la misma dirección. De las 523 ofertas, 394 son p
 
 Eso rompe con una expectativa común en la conversación sobre empleo digital. La parte visible del mercado laboral de datos en Ecuador no luce remota, distribuida ni globalizada. Luce urbana, presencial y muy atada a la lógica organizacional tradicional.
 
-¿Por qué se da esto? Una explicación plausible es que los empleadores ecuatorianos siguen teniendo bastante poder para fijar condiciones en un mercado laboral estancado. Cuando la oferta de profesionales es amplia y la demanda no despega con la misma fuerza, las empresas no solo pueden pagar menos por el mejor talento: también pueden exigir más presencialidad y menos flexibilidad. Un profesional buscando su nuevo reto debe tomar esto en cuenta. 
+¿Por qué se da esto? Una explicación plausible es que los empleadores ecuatorianos siguen teniendo bastante poder para fijar condiciones en un mercado laboral estancado. Cuando la oferta de profesionales es amplia y la demanda no despega con la misma fuerza, las empresas pueden pagar menos por el mejor talento y, además, exigir más presencialidad y menos flexibilidad. Un profesional buscando su nuevo reto debe tomar esto en cuenta.
 
 # Las habilidades blandas refuerzan el perfil operativo de estas vacantes
 
@@ -110,12 +110,12 @@ Los términos más repetidos en las descripciones son organización, que aparece
 *Gráfico 4: Habilidades blandas más mencionadas en las descripciones de vacantes*
 
 ```{r grafico4}
-knitr::include_graphics("images/grafico4.png")
+knitr::include_graphics("images/grafico4.svg")
 ```
 
 *Fuente: Multitrabajos, Computrabajo y Mipleo. Nota: la identificación se basa en palabras clave dentro de las descripciones de puesto.*
 
-Eso encaja con el resto del artículo. Las empresas no están buscando solamente a alguien que sepa abrir una base o mover datos en Excel. Están buscando perfiles que sostengan procesos, coordinen áreas, sigan indicadores, ordenen información y comuniquen resultados dentro de equipos de trabajo. Incluso en las vacantes más cercanas a datos, el perfil dominante es el de soporte analítico para la operación, no el de una persona aislada haciendo modelación técnica.
+Eso encaja con el resto del artículo. Las empresas buscan algo más que alguien que sepa abrir una base o mover datos en Excel. Buscan perfiles que sostengan procesos, coordinen áreas, sigan indicadores, ordenen información y comuniquen resultados dentro de equipos de trabajo. Incluso en las vacantes más cercanas a datos, el perfil dominante es el de soporte analítico para la operación, antes que el de una persona aislada haciendo modelación técnica.
 
 # ¿Qué significa esto para los profesionales en datos?
 
@@ -123,7 +123,7 @@ La lección más importante es que el mercado visible de datos en Ecuador no est
 
 Primero, vale la pena dominar bien las herramientas básicas. Excel no es un paso menor ni una estación vergonzosa antes de lo importante. En este mercado, es una herramienta central. Lo mismo pasa con Power BI, SQL, reportería y manejo de indicadores.
 
-Segundo, el conocimiento de negocio importa. Muchas de estas vacantes están insertas en ventas, finanzas, logística, administración y operaciones. Por eso no basta con saber mover datos, sino entender qué problema de empresa estás resolviendo y por qué ese dato importa dentro de un proceso real. ¿Qué significa esto en la práctica? Un profesional en formación puede aprovechar mucho pasantías, voluntariados o primeros trabajos para aprender más sobre el negocio en el que desea trabajar.
+Segundo, el conocimiento de negocio importa. Muchas de estas vacantes están insertas en ventas, finanzas, logística, administración y operaciones. Por eso hace falta entender, además del manejo de los datos, qué problema de empresa estás resolviendo y por qué ese dato importa dentro de un proceso real. ¿Qué significa esto en la práctica? Un profesional en formación puede aprovechar mucho pasantías, voluntariados o primeros trabajos para aprender más sobre el negocio en el que desea trabajar.
 
 Tercero, las habilidades blandas no son un adorno. Comunicación, organización, trabajo en equipo y proactividad aparecen porque los analistas de datos no trabajan solos. Presentan hallazgos, coordinan áreas, empujan procesos y convierten información en decisiones comprensibles para otros. Un profesional en formación se beneficia mucho de estar cómodo en trabajo en equipo, presentaciones y comunicación escrita.
 
@@ -139,5 +139,5 @@ También hay límites importantes en variables clave. La información salarial a
 
 Aun con esos límites, la base sí permite responder la pregunta central del artículo. La parte visible del mercado laboral de datos en Ecuador está dominada por herramientas básicas, funciones de seguimiento y perfiles operativos. Ese resultado es suficientemente consistente como para tomárselo en serio.
 
-*Este artículo se elaboró con ofertas laborales públicas observadas en Multitrabajos, Computrabajo y Mipleo entre el 17 de junio y el 26 de julio de 2026. El repositorio con la base reproducible del análisis está disponible en [GitHub](https://github.com/dsanchezp18/quanti-jobs-scraping).
+*Este artículo se elaboró con ofertas laborales públicas observadas en Multitrabajos, Computrabajo y Mipleo entre el 17 de junio y el 26 de julio de 2026. El repositorio con la base reproducible del análisis está disponible en [GitHub](https://github.com/dsanchezp18/quanti-jobs-scraping).*
 
