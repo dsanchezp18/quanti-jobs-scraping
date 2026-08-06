@@ -5,9 +5,9 @@
 #          de datos en Ecuador a partir de la muestra final.
 # Inputs:  data/final/ofertas_universo_analitico.csv,
 #          data/final/ofertas_con_habilidades.csv
-# Outputs: outputs/figures/*.png, outputs/tables/*.csv,
+# Outputs: outputs/figures/*.png, outputs/figures/*.svg, outputs/tables/*.csv,
 #          outputs/mercado_datos_resumen.rds,
-#          final_version/images/grafico*.png
+#          final_version/images/grafico*.png, final_version/images/grafico*.svg
 # ============================================================
 
 # 0. Setup ----
@@ -19,6 +19,7 @@ library(stringr)
 library(tidyr)
 library(tibble)
 library(forcats)
+library(svglite)
 
 # set.seed(42)
 
@@ -32,15 +33,21 @@ dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(article_images_dir, recursive = TRUE, showWarnings = FALSE)
 
 # El bundle de El Quantificador numera las figuras segun el orden del texto.
+# Se sincronizan las dos extensiones: el sitio publica el SVG y el PNG queda
+# como respaldo y fuente del thumbnail.
 article_figures <- c(
-  "familias_ocupacionales.png" = "grafico1.png",
-  "herramientas_demandadas.png" = "grafico2.png",
-  "competencias_tecnicas.png" = "grafico3.png",
-  "habilidades_suaves.png" = "grafico4.png"
+  "familias_ocupacionales" = "grafico1",
+  "herramientas_demandadas" = "grafico2",
+  "competencias_tecnicas" = "grafico3",
+  "habilidades_suaves" = "grafico4"
 )
 
 fig_width <- 6.1
 fig_height <- 5.4
+
+# El PNG solo alimenta el thumbnail y el respaldo, asi que se exporta a una
+# densidad alta para que no se vea suave en pantallas de alta resolucion.
+png_dpi <- 300
 
 quanti_blue <- "#6FA8DC"
 quanti_blue_dark <- "#355C7D"
@@ -272,7 +279,16 @@ ggsave(
   plot = fig_herramientas,
   width = fig_width,
   height = fig_height,
-  dpi = 180,
+  dpi = png_dpi,
+  bg = "white"
+)
+
+ggsave(
+  file.path(figures_dir, "herramientas_demandadas.svg"),
+  plot = fig_herramientas,
+  device = svglite,
+  width = fig_width,
+  height = fig_height,
   bg = "white"
 )
 
@@ -303,7 +319,16 @@ ggsave(
   plot = fig_competencias,
   width = fig_width,
   height = fig_height,
-  dpi = 180,
+  dpi = png_dpi,
+  bg = "white"
+)
+
+ggsave(
+  file.path(figures_dir, "competencias_tecnicas.svg"),
+  plot = fig_competencias,
+  device = svglite,
+  width = fig_width,
+  height = fig_height,
   bg = "white"
 )
 
@@ -331,7 +356,16 @@ ggsave(
   plot = fig_familias,
   width = fig_width,
   height = fig_height,
-  dpi = 180,
+  dpi = png_dpi,
+  bg = "white"
+)
+
+ggsave(
+  file.path(figures_dir, "familias_ocupacionales.svg"),
+  plot = fig_familias,
+  device = svglite,
+  width = fig_width,
+  height = fig_height,
   bg = "white"
 )
 
@@ -361,7 +395,16 @@ ggsave(
   plot = fig_soft_skills,
   width = fig_width,
   height = fig_height,
-  dpi = 180,
+  dpi = png_dpi,
+  bg = "white"
+)
+
+ggsave(
+  file.path(figures_dir, "habilidades_suaves.svg"),
+  plot = fig_soft_skills,
+  device = svglite,
+  width = fig_width,
+  height = fig_height,
   bg = "white"
 )
 
@@ -387,8 +430,14 @@ saveRDS(resumen_mercado_datos, file.path("outputs", "mercado_datos_resumen.rds")
 
 # 7. Sync article bundle ----
 file.copy(
-  from = file.path(figures_dir, names(article_figures)),
-  to = file.path(article_images_dir, unname(article_figures)),
+  from = file.path(figures_dir, str_c(names(article_figures), ".png")),
+  to = file.path(article_images_dir, str_c(unname(article_figures), ".png")),
+  overwrite = TRUE
+)
+
+file.copy(
+  from = file.path(figures_dir, str_c(names(article_figures), ".svg")),
+  to = file.path(article_images_dir, str_c(unname(article_figures), ".svg")),
   overwrite = TRUE
 )
 
