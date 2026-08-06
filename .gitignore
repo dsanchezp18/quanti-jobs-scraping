@@ -8,7 +8,8 @@ data/final/*
 !data/intermediate/README.md
 !data/final/README.md
 
-# Render del borrador: se regenera con quarto desde el .md fuente
+# Renders del borrador: se regeneran desde las fuentes
+final_version/index.html
 borrador_articulo_quantificador.html
 *_files/
 .quarto/
