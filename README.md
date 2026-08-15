@@ -1,4 +1,4 @@
-# quanti-jobs-scraping
+# Mercado laboral de datos en Ecuador: habilidades y herramientas demandadas
 
 ## Overview
 
